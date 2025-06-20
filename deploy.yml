@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Setup Node
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -24,13 +24,11 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: |
-          npm run build
-          # If using create-react-app, it builds to 'build' directory by default
-          # Either change this to 'dist' or update the publish_dir below
-          
+        run: npm run build
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build 
+          publish_dir: ./dist
+          keep_files: false
